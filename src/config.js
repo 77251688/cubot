@@ -43,6 +43,11 @@ class config {
             });
         }).then();
     }
+    /** getadminsArr */
+    static getadmins() {
+        const { admins } = config.returnconfig();
+        return admins;
+    }
     /** system in mode mode 1:qrcode is default ≠1||≠null:password */
     static loginmode() {
         return new Promise((res, reject) => {

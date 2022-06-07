@@ -49,7 +49,6 @@ class login {
             }).login();
         }
         else {
-            console.log(123);
             /** 想必不用我说了吧🤔 */
             bot.on("system.login.slider", function (e) {
                 process.stdin.once("data", sysin => {
