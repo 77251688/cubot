@@ -27,10 +27,7 @@ class Initbot {
             config_1.config.create();
             config_1.config.rename();
             config_1.config.initwriteconfig();
-            await config_1.config.clientid();
-            await config_1.config.admin();
-            await config_1.config.loginmode();
-            await config_1.config.platform();
+            await config_1.config.sysin();
         }
     }
 }
