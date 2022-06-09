@@ -1,11 +1,6 @@
 {
   "dependencies": {
-    "oicq": "^2.2.3"
-  },
-  "devDependencies": {
-    "@types/node": "^17.0.36",
-    "@typescript-eslint/eslint-plugin": "^5.27.0",
-    "@typescript-eslint/parser": "^5.27.0",
-    "eslint": "^8.16.0"
+    "inquirer": "^8.2.4",
+    "@cummins/oicq": "1.0.2"
   }
 }
