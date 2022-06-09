@@ -28,6 +28,9 @@ async function sendadmins(bot, msg) {
 }
 async function adminsEvents(bot) {
     bot.on("system.online", online);
+    bot.on("message.group", e => {
+        console.log(e);
+    });
 }
 /** create a client🥥 */
 (async function step() {

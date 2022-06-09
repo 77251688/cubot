@@ -1,6 +1,6 @@
 {
   "dependencies": {
     "inquirer": "^8.2.4",
-    "@cummins/oicq": "1.0.2"
+    "@cummins/oicq": "1.1.2"
   }
 }

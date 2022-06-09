@@ -17,7 +17,7 @@ class config {
     }
     /** initwriteconfig */
     static initwriteconfig() {
-        const initobj = { "bot": '', "mode": "qrcode", "password": "", "admins": [], "plugins": [], "platform": 5 };
+        const initobj = { "bot": '', "mode": "qrcode", "password": "", "verifymethod": null, "admins": [], "plugins": [], "platform": 5 };
         const config = JSON.stringify(initobj, null, '\t');
         fs.writeFileSync('../config.json', config);
     }
@@ -71,7 +71,6 @@ class config {
             ];
             inquirer.prompt(quesions).then(e => {
                 const { clientid, admin, loginmode, platform, password } = e;
-                console.log(clientid);
                 const config_ = config.returnconfig();
                 config_.bot = parseInt(clientid);
                 const admin_ = parseInt(admin);
@@ -101,6 +100,20 @@ class config {
     static returnconfig() {
         return JSON.parse(fs.readFileSync('../config.json', 'utf8'));
     }
+    /** passwordlogin verifymethod */
+    static verifymethod() {
+        return new Promise(res => {
+            inquirer.prompt(q).then(e => {
+                const config_ = config.returnconfig();
+                if (config_.mode === "qrcode")
+                    return;
+                const { verifymethod } = e;
+                config_.verifymethod = verifymethod;
+                config.writeconfig(config_);
+                res(verifymethod);
+            });
+        });
+    }
     /** write config */
     static writeconfig(data) {
         const config = JSON.stringify(data, null, '\t');
@@ -108,3 +121,13 @@ class config {
     }
 }
 exports.config = config;
+/** password verifymethod */
+const q = [{
+        type: "list",
+        name: "verifymethod",
+        message: "选择验证方式",
+        choices: [
+            "url验证",
+            "短信验证"
+        ]
+    }];

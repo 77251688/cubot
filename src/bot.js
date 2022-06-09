@@ -28,13 +28,14 @@ class Initbot {
             config_1.config.rename();
             config_1.config.initwriteconfig();
             await config_1.config.sysin();
+            await config_1.config.verifymethod();
         }
     }
 }
 /** login method class */
 class login {
     static loginmethod(bot) {
-        const { mode, password } = config_1.config.returnconfig();
+        const { mode, password, verifymethod } = config_1.config.returnconfig();
         /** qrcode login */
         if (mode === "qrcode") {
             bot.on("system.login.qrcode", function (e) {
@@ -44,19 +45,36 @@ class login {
                     this.login();
                 });
             }).login();
+            return;
         }
-        else {
-            /** 想必不用我说了吧🤔 */
-            bot.on("system.login.slider", function (e) {
+        /** 想必不用我说了吧🤔 */
+        if (verifymethod === "url验证") {
+            bot.on("system.login.slider", function (event) {
                 process.stdin.once("data", sysin => {
                     const input = String(sysin).trim();
-                    this.sliderLogin(input); //输入ticket
+                    this.sliderLogin(input);
                 });
-            }).on("system.login.device", function (e) {
+            }).on("system.login.device", function (event) {
                 process.stdin.once("data", () => {
-                    this.login(); //验证完成后按回车登录
+                    this.login();
                 });
-            }).login(password); //需要填写密码或md5后的密码
+            }).login(password);
+        }
+        else {
+            bot.on("system.login.slider", function (event) {
+                process.stdin.once("data", sysin => {
+                    const input = String(sysin).trim();
+                    this.sliderLogin(input);
+                });
+            }).on("system.login.device", function (event) {
+                this.sendSmsCode();
+                process.stdin.once("data", sysin => {
+                    this.logger.mark("输入收到的验证码");
+                    const SMScode = String(sysin).trim();
+                    this.submitSmsCode(SMScode);
+                    this.login();
+                });
+            }).login(password);
         }
     }
 }
