@@ -103,12 +103,19 @@ class config {
     /** passwordlogin verifymethod */
     static verifymethod() {
         return new Promise(res => {
+            const config_ = config.returnconfig();
+            if (config_.mode === "qrcode") {
+                res("qrcode");
+                return;
+            }
             inquirer.prompt(q).then(e => {
-                const config_ = config.returnconfig();
-                if (config_.mode === "qrcode")
-                    return;
                 const { verifymethod } = e;
-                config_.verifymethod = verifymethod;
+                if (verifymethod === "url验证") {
+                    config_.verifymethod = "urlverify";
+                }
+                else {
+                    config_.verifymethod = "SMSverify";
+                }
                 config.writeconfig(config_);
                 res(verifymethod);
             });

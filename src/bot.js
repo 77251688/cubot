@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.client = void 0;
 const config_1 = require("./config");
-const oicq_1 = require("oicq");
+const oicq_1 = require("@cummins/oicq");
 /**
  * 🤔😅🥰🥵🤨🥥🍇🍈🍋🍍🍪🍮🍹
  * 无规则命名法🥵🥰🥰🥰
@@ -48,7 +48,7 @@ class login {
             return;
         }
         /** 想必不用我说了吧🤔 */
-        if (verifymethod === "url验证") {
+        if (verifymethod === "urlverify") {
             bot.on("system.login.slider", function (event) {
                 process.stdin.once("data", sysin => {
                     const input = String(sysin).trim();

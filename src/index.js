@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const config_1 = require("./config");
 const bot_1 = require("./bot");
+const utils_1 = require("./utils");
 /**
  * 🤔😅🥰🥵🤨✅❌🥥🍇🍈🍋🍍🍪🍮🍹
  * 无规则命名法🥵🥰🥰🥰
@@ -31,6 +32,28 @@ async function adminsEvents(bot) {
     bot.on("message.group", e => {
         console.log(e);
     });
+    bot.on("message", ee);
+}
+function ee(e) {
+    const { raw_message: msg, reply } = e;
+    if (msg == "#详情") {
+        console.log(111);
+        const msg = sys();
+        console.log(msg);
+        return e.reply(msg);
+    }
+}
+function sys() {
+    const { arch, core, cpumodel } = utils_1.systen.cpu();
+    const { memory, usedmem, usepercent } = utils_1.systen.memory();
+    const OStype = utils_1.systen.OStype();
+    const usedmemory = parseInt(usedmem) < parseInt(memory) ? usedmem + "G" : usedmem + "M";
+    let msg = "";
+    msg += `cpu架构: ${arch}\n`;
+    msg += `操作系统: ${OStype}\n`;
+    msg += `cpu: ${cpumodel} ${core}核\n`;
+    msg += `内存: ${usedmemory}/${memory}G ${usepercent}%\n`;
+    return msg;
 }
 /** create a client🥥 */
 (async function step() {
