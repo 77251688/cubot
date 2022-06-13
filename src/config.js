@@ -117,7 +117,7 @@ class config {
                     config_.verifymethod = "SMSverify";
                 }
                 config.writeconfig(config_);
-                res(verifymethod);
+                // res(verifymethod);
             });
         });
     }

@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.systen = void 0;
 const os = require("os");
-// import * as 
+const index_1 = require("./index");
 class systen {
     /** cpu */
     static cpu() {
@@ -13,6 +13,8 @@ class systen {
         const core = cpus.length;
         /** model */
         const cpumodel = cpus[0].model;
+        // bot.sendPrivateMsg(907624307, "123");
+        console.log(index_1.bot);
         return { arch, core, cpumodel };
     }
     /** memory */
@@ -24,11 +26,11 @@ class systen {
         /** Free mem */
         const freemem_ = os.freemem();
         const _freemem = freemem_ / 1024 / 1024 / 1024;
-        const freemem__ = _freemem > 1 ? _freemem : _freemem * 1024;
+        const freemem__ = _freemem > 1 ? _freemem : _freemem * 2048;
         const freemem = slice_(freemem__);
         /** Uesd mem */
         const usedmem_ = (memory_ - freemem_) / 1024 / 1024 / 1024;
-        const usedmem__ = usedmem_ > 1 ? usedmem_ : usedmem_ * 1024;
+        const usedmem__ = usedmem_ > 1 ? usedmem_ : usedmem_ * 2048;
         const usedmem = slice_(usedmem__);
         /** percent */
         const usepercent__ = usedmem__ / memory__ * 100;
@@ -36,14 +38,14 @@ class systen {
         console.log({ memory, freemem, usedmem, usepercent });
         return { memory, freemem, usedmem, usepercent };
     }
-    /** systen */
+    /** OS */
     static OStype() {
         const sys = os.type();
         switch (sys) {
             case `Windows_NT`:
-                return `windows`;
+                return `Windows`;
             case `Linux`:
-                return `linux`;
+                return `Linux`;
             case `Darwin`:
                 return `Mac`;
         }
