@@ -31,7 +31,9 @@ class Initbot {
             config_1.config.rename();
             config_1.config.initwriteconfig();
             await config_1.config.sysin();
-            await config_1.config.verifymethod();
+            await config_1.config.verifymethod().then(e => {
+                console.log(e);
+            });
         }
     }
 }

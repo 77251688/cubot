@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.config = void 0;
 const fs = require("fs");
+const path = require("path");
 const inquirer = require("inquirer");
 /**
  * @config
@@ -9,7 +10,11 @@ const inquirer = require("inquirer");
  */
 class config {
     static create() {
-        fs.writeFileSync('../config', '');
+        const path_ = config.path();
+        fs.writeFileSync(`${path_}config`, '');
+    }
+    static path() {
+        return path.join(__dirname, '../');
     }
     static getadmins() {
         const { admins } = config.returnconfig();
@@ -18,8 +23,9 @@ class config {
     /** initwriteconfig */
     static initwriteconfig() {
         const initobj = { "bot": '', "mode": "qrcode", "password": "", "verifymethod": null, "admins": [], "plugins": [], "platform": 5 };
-        const config = JSON.stringify(initobj, null, '\t');
-        fs.writeFileSync('../config.json', config);
+        const config_ = JSON.stringify(initobj, null, '\t');
+        const path_ = config.path();
+        fs.writeFileSync(`${path_}config.json`, config_);
     }
     /** sysin */
     static sysin() {
@@ -90,15 +96,18 @@ class config {
     }
     /** return ../ list is has config.json? */
     static readlist() {
-        return fs.readdirSync('../');
+        const path_ = config.path();
+        return fs.readdirSync(path_);
     }
     /** rename config to config.json */
     static rename() {
-        fs.renameSync('../config', '../config.json');
+        const path_ = config.path();
+        fs.renameSync(`${path_}config`, `${path_}config.json`);
     }
     /** return config.json config in  */
     static returnconfig() {
-        return JSON.parse(fs.readFileSync('../config.json', 'utf8'));
+        const path_ = config.path();
+        return JSON.parse(fs.readFileSync(`${path_}config.json`, 'utf8'));
     }
     /** passwordlogin verifymethod */
     static verifymethod() {
@@ -117,14 +126,15 @@ class config {
                     config_.verifymethod = "SMSverify";
                 }
                 config.writeconfig(config_);
-                // res(verifymethod);
+                res(verifymethod);
             });
         });
     }
     /** write config */
     static writeconfig(data) {
-        const config = JSON.stringify(data, null, '\t');
-        fs.writeFileSync('../config.json', config);
+        const config_ = JSON.stringify(data, null, '\t');
+        const path_ = config.path();
+        fs.writeFileSync(`${path_}config.json`, config_);
     }
 }
 exports.config = config;
