@@ -11,12 +11,9 @@ const oicq_1 = require("@cummins/oicq");
 class client {
     static async create() {
         await Initbot.init();
-        console.log("??????");
         const { bot: bot_, platform: platform_ } = config_1.config.returnconfig();
         const bot = (0, oicq_1.createClient)(bot_, { platform: platform_ });
-        console.log('this?');
         login.loginmethod(bot);
-        console.log("emmm");
         return bot;
     }
 }
@@ -31,9 +28,7 @@ class Initbot {
             config_1.config.rename();
             config_1.config.initwriteconfig();
             await config_1.config.sysin();
-            await config_1.config.verifymethod().then(e => {
-                console.log(e);
-            });
+            await config_1.config.verifymethod();
         }
     }
 }
@@ -46,16 +41,13 @@ class login {
             bot.on("system.login.qrcode", function (e) {
                 //扫码后按回车登录
                 this.logger.mark("扫码后按Enter完成登录");
-                console.log("is this?");
                 process.stdin.once("data", () => {
                     this.login();
                 });
             }).login();
-            console.log("return?");
             return;
         }
         /** 想必不用我说了吧🤔 */
-        console.log(666);
         if (verifymethod === "urlverify") {
             bot.on("system.login.slider", function (event) {
                 process.stdin.once("data", sysin => {

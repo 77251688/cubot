@@ -35,9 +35,9 @@ async function sendadmins(bot, msg) {
 }
 async function adminsEvents(bot) {
     bot.on("system.online", online);
-    bot.on("message.group", e => {
-        console.log(e);
-    });
+    // bot.on("message.private", e => {
+    //     console.log(e);
+    // });
     bot.on("message", sys);
 }
 function sys(e) {
