@@ -1,8 +1,60 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.systen = void 0;
+exports.file = exports.systen = exports.Admin = void 0;
+const fs = require("fs");
 const os = require("os");
-const index_1 = require("./index");
+const config_1 = require("./config");
+class Admin {
+    static getmaster() {
+        const { admins } = config_1.config.returnconfig();
+        return admins[0];
+    }
+    static getadmins() {
+        const { admins } = config_1.config.returnconfig();
+        return admins;
+    }
+    static setAdmin(uid) {
+        try {
+            const config_ = config_1.config.returnconfig();
+            if (this.getadmins().includes(uid)) {
+                return `❌${uid}已经设置过了你想怎样?`;
+            }
+            config_.admins.push(uid);
+            const status = config_1.config.writeconfig(config_);
+            if (status === true) {
+                return "✅设置成功!";
+            }
+            else {
+                return "❌设置失败! 原因未知";
+            }
+        }
+        catch (e) {
+            console.log(e);
+        }
+    }
+    static removeAdmin(uid) {
+        try {
+            const config_ = config_1.config.returnconfig();
+            const { admins } = config_;
+            if (!admins.includes(uid))
+                return "❌删除失败! 没有这个管理员!";
+            const i = admins.indexOf(uid);
+            admins.splice(i, 1);
+            config_.admins = admins;
+            const status = config_1.config.writeconfig(config_);
+            if (status === true) {
+                return "✅删除成功!";
+            }
+            else {
+                return "❌删除失败! 原因未知";
+            }
+        }
+        catch (e) {
+            console.log(e);
+        }
+    }
+}
+exports.Admin = Admin;
 class systen {
     /** cpu */
     static cpu() {
@@ -13,8 +65,6 @@ class systen {
         const core = cpus.length;
         /** model */
         const cpumodel = cpus[0].model;
-        // bot.sendPrivateMsg(907624307, "123");
-        console.log(index_1.bot);
         return { arch, core, cpumodel };
     }
     /** memory */
@@ -58,3 +108,17 @@ const slice_ = (e) => {
     const result = str.slice(0, index_);
     return result;
 };
+/**
+ * json专用类
+ */
+class file {
+    static returnFile(file) {
+        const f = fs.readFileSync(file, "utf-8");
+        return JSON.parse(f);
+    }
+    static writeFile(file, data) {
+        const data_ = JSON.stringify(data, null, "\t");
+        fs.writeFileSync(file, data_);
+    }
+}
+exports.file = file;

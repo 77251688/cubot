@@ -16,10 +16,6 @@ class config {
     static path() {
         return path.join(__dirname, '../');
     }
-    static getadmins() {
-        const { admins } = config.returnconfig();
-        return admins;
-    }
     /** initwriteconfig */
     static initwriteconfig() {
         const initobj = { "bot": '', "mode": "qrcode", "password": "", "verifymethod": null, "admins": [], "plugins": [], "platform": 5 };
@@ -135,6 +131,7 @@ class config {
         const config_ = JSON.stringify(data, null, '\t');
         const path_ = config.path();
         fs.writeFileSync(`${path_}config.json`, config_);
+        return true;
     }
 }
 exports.config = config;

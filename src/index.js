@@ -1,49 +1,72 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.bot = void 0;
-// import * as fs from 'fs';
-const oicq_1 = require("@cummins/oicq");
-// import { cqcode } from '@cummins/oicq';
-const config_1 = require("./config");
 const bot_1 = require("./bot");
 const utils_1 = require("./utils");
+const plugin_1 = require("./plugin");
 /**
  * 🤔😅🥰🥵🤨✅❌🥥🍇🍈🍋🍍🍪🍮🍹
  * 无规则命名法🥵🥰🥰🥰
- *
+ * 无规则注释
  */
+function onMessage(e) {
+    const admin = utils_1.Admin.getmaster();
+    const cmdstartstr = "#";
+    const { raw_message: msg, user_id: uid } = e;
+    if (!(uid == admin))
+        return;
+    if (!msg.startsWith(cmdstartstr))
+        return;
+    const cmdArr = msg.trim().replace("#", "").split(" ");
+    const cmd = cmdArr[0];
+    const params = cmdArr.slice(1);
+    const msg_ = cmdHanders.call(this, cmd, params);
+    if (msg_ == 0)
+        return;
+    e.reply(msg_);
+}
 /** online push */
-async function online() {
+function online() {
     sendadmins(this, "✅重连成功");
+}
+function onlineActivity(bot) {
+    try {
+        let msg = "";
+        const size = (0, plugin_1.onlineActivate)(bot);
+        msg += `✅上线成功!可以愉快玩耍了!\n`;
+        msg += `✅启用了${size}个插件`;
+        sendadmins(bot, msg);
+    }
+    catch (e) {
+        console.log(e);
+        sendadmins(bot, e.message);
+    }
 }
 /** sendmsg all admins */
 async function sendadmins(bot, msg) {
-    const admins = config_1.config.getadmins();
-    for (const e of admins) {
-        if (bot.fl.has(e)) {
-            const a = oicq_1.segment.image("E:\\桌面\\90d15f47728b9569602460eae77628d.jpg", false, 5);
-            bot.sendPrivateMsg(e, a);
-            bot.sendPrivateMsg(e, msg);
-        }
-        else {
-            console.log(e);
-            const { nickname: stranger } = await bot.getStrangerInfo(e);
-            bot.logger.warn(`❌${stranger}不是你的好友!无法发送消息!`);
-            bot.sendPrivateMsg(admins[0], `管理员"${stranger}"不是你的好友!无法发送消息!`);
+    try {
+        const admins = utils_1.Admin.getadmins();
+        for (const e of admins) {
+            if (bot.fl.has(e)) {
+                bot.sendPrivateMsg(e, msg);
+            }
+            else {
+                const { nickname: stranger } = await bot.getStrangerInfo(e);
+                bot.logger.warn(`❌${stranger}不是你的好友!无法发送消息!`);
+                bot.sendPrivateMsg(admins[0], `管理员"${stranger}"不是你的好友!无法发送消息!`);
+            }
         }
     }
+    catch (e) {
+        console.log(e);
+    }
 }
-async function adminsEvents(bot) {
+function adminsEvents(bot) {
     bot.on("system.online", online);
-    // bot.on("message.private", e => {
-    //     console.log(e);
-    // });
-    bot.on("message", sys);
 }
-function sys(e) {
-    const { raw_message: msg } = e;
-    if (msg != "详情")
-        return;
+function events(bot) {
+    bot.on("message", onMessage);
+}
+function sys() {
     const { arch, core, cpumodel } = utils_1.systen.cpu();
     const { memory, usedmem, usepercent } = utils_1.systen.memory();
     const OStype = utils_1.systen.OStype();
@@ -53,17 +76,63 @@ function sys(e) {
     msg_ += `操作系统: ${OStype}\n`;
     msg_ += `cpu: ${cpumodel} ${core}核\n`;
     msg_ += `内存: ${usedmemory}/${memory}G ${usepercent}%`;
-    e.reply(msg_);
+    return msg_;
 }
-const obj = [];
+function cmdHanders(cmd, params) {
+    const cmd_ = params[0];
+    const cmd__ = params[1];
+    try {
+        let msg = "";
+        if (cmd === "详情") {
+            msg = sys();
+            return msg;
+        }
+        if (cmd === "帮助" || cmd === "help") {
+            msg += `#详情 [机器人详情]\n`;
+            msg += `#插件 [插件帮助]\n`;
+            msg += `\n`;
+            return msg;
+        }
+        if (cmd === "插件" || cmd === "plugin") {
+            if (cmd_) {
+                switch (cmd_) {
+                    case "ls":
+                        return (0, plugin_1.pluginlist)();
+                    case "启用":
+                        if (!cmd__)
+                            return `没带参数?`;
+                        return (0, plugin_1.activate)(cmd__, this);
+                    case "禁用":
+                        if (!cmd__)
+                            return `没带参数?`;
+                        return (0, plugin_1.deactivate)(cmd__, this);
+                    default:
+                        return `你没带参数? 如: cmd cmd_ data`;
+                }
+            }
+            msg += `#${cmd} ls\n`;
+            msg += `#${cmd} 启用 插件名\n`;
+            msg += `$${cmd}\n`;
+            return msg;
+        }
+        if (cmd === "重载" || cmd === "reload") {
+            if (!cmd_)
+                return `#${cmd} 插件名`;
+            return (0, plugin_1.reload)(cmd_, this);
+        }
+        return 0;
+    }
+    catch (e) {
+        return `error: ${e.message}`;
+    }
+}
 /** create client🥥 */
 (async function step() {
     const bot = await bot_1.client.create();
-    obj.push(bot);
     bot.once('system.online', () => {
         bot.logger.mark('上线成功!');
-        sendadmins(bot, `✅上线成功!可以愉快玩耍了!`);
+        onlineActivity(bot);
         adminsEvents(bot);
+        events(bot);
     });
 })();
-exports.bot = obj[0];
