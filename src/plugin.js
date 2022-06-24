@@ -46,7 +46,7 @@ class Plugin {
             throw new Error("❌该插件未导出disable方法,无法禁用!");
         }
         mod.exports.disable(bot);
-        delete require.cache[this, this.fullpath];
+        delete require.cache[this.fullpath];
         plugins.delete(name);
         this.editPluginCache("delete");
         return "✅禁用成功";
