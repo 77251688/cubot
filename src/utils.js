@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.file = exports.systen = exports.Admin = void 0;
+exports.random = exports.file = exports.systen = exports.Admin = void 0;
 const fs = require("fs");
 const os = require("os");
 const config_1 = require("./config");
@@ -122,3 +122,13 @@ class file {
     }
 }
 exports.file = file;
+/** random */
+class random {
+    /** 随机整数包含两个数 */
+    static intrandom(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+}
+exports.random = random;

@@ -84,8 +84,7 @@ function cmdHanders(cmd, params) {
     try {
         let msg = "";
         if (cmd === "详情") {
-            msg = sys();
-            return msg;
+            return sys();
         }
         if (cmd === "帮助" || cmd === "help") {
             msg += `#详情 [机器人详情]\n`;
