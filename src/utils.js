@@ -132,3 +132,4 @@ class random {
     }
 }
 exports.random = random;
+/** timestamp */
