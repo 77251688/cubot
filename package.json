@@ -1,7 +1,7 @@
 {
   "dependencies": {
-    "inquirer": "^8.2.4",
-    "@cummins/oicq": "1.1.1"
+    "@cummins/oicq": "1.1.1",
+    "inquirer": "^8.2.4"
   },
   "scripts": {
     "start": "node ./src/index.js",
