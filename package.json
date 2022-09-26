@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "@cummins/oicq": "^1.1.5",
+    "inquirer": "^8.2.4"
+  },
+  "scripts": {
+    "start": "node ./src/index.js",
+    "log": "pm2 log cummins",
+    "stop": "pm2 stop cummins",
+    "delete": "pm2 delete cummins",
+    "deploy": "pm2 start ./src/index.js --name cummins"
+  }
+}
